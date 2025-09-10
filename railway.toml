@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "cd src && python web_server.py"
+startCommand = "cd src && python mcp_bridge.py"
 
 [env]
 PYTHONPATH = "/app/src"

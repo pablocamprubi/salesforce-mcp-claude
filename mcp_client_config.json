@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "salesforce-hosted": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/client-http",
+        "https://salesforce-mcp-claude-production.up.railway.app/mcp"
+      ],
+      "env": {}
+    }
+  }
+}
+
+
