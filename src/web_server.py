@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
+from contextlib import asynccontextmanager
 import os
 import json
 import uvicorn
@@ -16,10 +17,25 @@ import uvicorn
 from salesforcemcp import sfdc_client
 from salesforcemcp import implementations as sfmcpimpl
 
+# Initialize Salesforce client globally
+sf_client = sfdc_client.OrgHandler()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize Salesforce connection on startup"""
+    print("Starting up Salesforce MCP API...")
+    if not sf_client.establish_connection():
+        print("Warning: Failed to establish Salesforce connection")
+    else:
+        print("✅ Salesforce connection established")
+    yield
+    print("Shutting down Salesforce MCP API...")
+
 app = FastAPI(
     title="Salesforce MCP API",
     description="REST API for Salesforce operations including object creation, data querying, and Einstein Studio models",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # Add CORS middleware for ChatGPT integration
@@ -31,15 +47,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Salesforce client
-sf_client = sfdc_client.OrgHandler()
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize Salesforce connection on startup"""
-    if not sf_client.establish_connection():
-        print("Warning: Failed to establish Salesforce connection")
-
 # Health check endpoint for Railway
 @app.get("/health")
 async def health_check():
@@ -47,13 +54,16 @@ async def health_check():
     return {"status": "healthy", "service": "Salesforce MCP API"}
 
 @app.get("/")
+@app.post("/")  
 async def root():
-    """Root endpoint with API information"""
+    """Root endpoint with API information - handles both GET and POST"""
     return {
         "message": "Salesforce MCP API",
         "version": "1.0.0",
         "docs": "/docs",
-        "health": "/health"
+        "health": "/health",
+        "openapi": "/openapi.json",
+        "manifest": "/.well-known/ai-plugin.json"
     }
 
 
