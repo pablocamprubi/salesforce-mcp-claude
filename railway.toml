@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "cd src && python -m salesforcemcp.server"
+startCommand = "cd src && python web_server.py"
 
 [env]
 PYTHONPATH = "/app/src"

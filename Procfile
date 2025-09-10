@@ -1,1 +1,1 @@
-web: cd src && python -m salesforcemcp.server
+web: cd src && python web_server.py
