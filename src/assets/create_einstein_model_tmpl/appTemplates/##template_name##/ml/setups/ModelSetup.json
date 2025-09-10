@@ -1,0 +1,30 @@
+{
+  "type": "EdcNoCode",
+  "validationConfiguration": null,
+  "description": "##setup_description##",
+  "fieldSelection": "Manual",
+  "status": "Draft",
+  "sourceSetupVersionNumber": 0,
+  "transformations": [],
+  "input": {
+    "type": "DataModelObject",
+    "source": {
+      "name": "##data_source##"
+    }
+  },
+  "outcomes": [
+    {
+      "type": "##outcome_type##",
+      "failureValue": "##failure_value##",
+      "goal": "##goal##",
+      "label": "##outcome_label##",
+      "name": "##outcome_field##",
+      "source": null,
+      "successValue": "##success_value##"
+    }
+  ],
+  "modelConfiguration": {
+    "algorithmType": "##algorithm_type##"
+  },
+  "fields": ##fields_json##
+}

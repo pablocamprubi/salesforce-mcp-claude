@@ -1,0 +1,25 @@
+{
+  "label": "##model_label##",
+  "description": "##template_description##",
+  "releaseInfo": {
+    "templateVersion": "1.0",
+    "notesFile": null
+  },
+  "templateType": "App",
+  "name": "##template_name##",
+  "namespace": null,
+  "assetVersion": 63.0,
+  "maxAppCount": null,
+  "icons": {
+    "templatePreviews": []
+  },
+  "variableDefinition": "variables.json",
+  "layoutDefinition": "layout.json",
+  "tags": {},
+  "chainDefinitions": [
+    {
+      "type": "Create",
+      "file": "create-chain.json"
+    }
+  ]
+}

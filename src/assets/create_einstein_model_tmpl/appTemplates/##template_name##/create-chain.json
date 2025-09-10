@@ -1,0 +1,60 @@
+{
+  "name": "createMLModel",
+  "label": "Creates a Simple ML Model",
+  "parameters": {},
+  "dominoVariant": "sfdc_internal__UnifiedAnalyticsDominoVariant",
+  "definition": {
+    "nodes": {
+      "upsert_container_ModelBuilderModel": {
+        "referenceId": "upsert_container_ModelBuilderModel",
+        "sources": [],
+        "parameters": {
+          "name": "ModelContainer",
+          "file": "ml/containers/ModelContainer.json"
+        },
+        "graphNodeType": {
+          "name": "MLSetupContainerUpsert",
+          "label": "Create/Update a Machine-Learning Container from a Template"
+        }
+      },
+      "upsert_setup_ModelBuilderModel": {
+        "referenceId": "upsert_setup_ModelBuilderModel",
+        "sources": ["upsert_container_ModelBuilderModel"],
+        "parameters": {
+          "name": "ModelSetup",
+          "file": "ml/setups/ModelSetup.json",
+          "container": "ModelContainer"
+        },
+        "graphNodeType": {
+          "name": "MLSetupUpsert",
+          "label": "Create/Update a Machine-Learning Setup from a Template"
+        }
+      },
+      "train_model_ModelBuiler": {
+        "referenceId": "train_model_ModelBuiler",
+        "sources": ["upsert_setup_ModelBuilderModel"],
+        "parameters": {
+          "name": "ModelTrainJob",
+          "setup": "ModelSetup",
+          "onError": "Fail"
+        },
+        "graphNodeType": {
+          "name": "MLTraining",
+          "label": null
+        }
+      },
+      "activate_model_ModelBuilder": {
+        "referenceId": "activate_model_ModelBuilder",
+        "sources": ["train_model_ModelBuiler"],
+        "parameters": {
+          "name": "ModelActivation",
+          "setup": "ModelSetup"
+        },
+        "graphNodeType": {
+          "name": "MLActivation",
+          "label": "Activate a Machine-Learning model"
+        }
+      }
+    }
+  }
+}
