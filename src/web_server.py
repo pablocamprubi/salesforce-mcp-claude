@@ -5,6 +5,7 @@ Exposes MCP tools as REST API endpoints for ChatGPT and web usage.
 """
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 import os
@@ -19,6 +20,15 @@ app = FastAPI(
     title="Salesforce MCP API",
     description="REST API for Salesforce operations including object creation, data querying, and Einstein Studio models",
     version="1.0.0"
+)
+
+# Add CORS middleware for ChatGPT integration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Initialize Salesforce client
@@ -45,6 +55,35 @@ async def root():
         "docs": "/docs",
         "health": "/health"
     }
+
+
+# Manifest endpoint for ChatGPT Actions
+@app.get("/.well-known/ai-plugin.json")
+async def get_manifest():
+    """Manifest for ChatGPT plugin integration"""
+    return {
+        "schema_version": "v1",
+        "name_for_human": "Salesforce MCP API",
+        "name_for_model": "salesforce_mcp",
+        "description_for_human": "Access Salesforce data, create objects, and manage Einstein models",
+        "description_for_model": "API for Salesforce operations including SOQL queries, object creation, and Einstein Studio models",
+        "auth": {
+            "type": "none"
+        },
+        "api": {
+            "type": "openapi",
+            "url": "https://salesforce-mcp-claude-production.up.railway.app/openapi.json"
+        },
+        "logo_url": "https://salesforce-mcp-claude-production.up.railway.app/logo.png",
+        "contact_email": "support@example.com",
+        "legal_info_url": "https://salesforce-mcp-claude-production.up.railway.app/legal"
+    }
+
+# OpenAPI spec endpoint (alternative path)
+@app.get("/openapi.json")
+async def get_openapi():
+    """Get OpenAPI specification"""
+    return app.openapi()
 
 # Request/Response models
 class CreateObjectRequest(BaseModel):
