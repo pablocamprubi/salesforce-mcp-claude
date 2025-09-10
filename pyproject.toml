@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [project.scripts]
-salesforce = "server:main"
+salesforce-mcp = "salesforcemcp.server:main"
 
 [tool.uv]
 package = true

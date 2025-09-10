@@ -6,9 +6,9 @@ from mcp.server.models import InitializationOptions
 
 import mcp.server.stdio
 
-import salesforcemcp.sfdc_client as sfdc_client
-import salesforcemcp.definitions as sfmcpdef
-import salesforcemcp.implementations as sfmcpimpl
+from . import sfdc_client
+from . import definitions as sfmcpdef  
+from . import implementations as sfmcpimpl
     
 server = Server("salesforce-mcp")
 
